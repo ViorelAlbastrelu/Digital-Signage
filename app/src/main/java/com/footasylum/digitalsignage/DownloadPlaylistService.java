@@ -23,9 +23,10 @@ public class DownloadPlaylistService extends Service {
     private final IBinder iBinder = new MyBinder();
 
     public DownloadPlaylistService() {
+//        downloadWithManager("Provide url");
     }
 
-    public void dowloadWithManager(String fileURL){
+    public void downloadWithManager(String fileURL){
 
         String fileName = URLUtil.guessFileName(fileURL, null, MimeTypeMap.getFileExtensionFromUrl(fileURL));
         String dwnldDir = Environment.getDownloadCacheDirectory().getPath();
@@ -38,7 +39,7 @@ public class DownloadPlaylistService extends Service {
         request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
-//        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+//      request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
         request.setDestinationInExternalFilesDir(this, dwnldDir, fileName);
 
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
@@ -78,7 +79,7 @@ public class DownloadPlaylistService extends Service {
         return iBinder;
     }
 
-    public class MyBinder extends Binder {
+    private class MyBinder extends Binder {
         DownloadPlaylistService getService(){
             return DownloadPlaylistService.this;
         }

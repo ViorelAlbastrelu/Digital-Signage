@@ -10,31 +10,30 @@ import java.util.ArrayList;
  * Created by Crow on 9/5/2017.
  */
 
-public class Playlist {
+class Playlist {
     //private ArrayList<HashMap<String, String>> playlist = new ArrayList<HashMap<String, String>>();
-    private ArrayList<String> playlist1 = new ArrayList<String>();
+    private ArrayList<String> playlist1 = new ArrayList<>();
 
-    final String MEDIA_PATH = Environment.getExternalStorageDirectory()+ File.separator+ "FA";
+    private final String MEDIA_PATH = Environment.getExternalStorageDirectory()+ File.separator+ "FA";
     /**
-     * Function to read all mp3 files from sdcard
+     * Function to read all mp4 and jpg files from sdcard
      * and store the details in ArrayList
      * */
-    public ArrayList<String> getPlayList(){
+    ArrayList<String> getPlayList(){
         File home = new File(MEDIA_PATH);
         if (home.listFiles()!=null) {
             for (File file : home.listFiles(new FileExtensionFilter())) {
                 String song = file.getPath();
                 playlist1.add(song);
-
             }
         }
         return playlist1;
     }
 
     /**
-     * Class to filter files which are having .mp3 extension
+     * Class to filter files which are having .mp4 or jpg extension
      * */
-    class FileExtensionFilter implements FilenameFilter {
+    private class FileExtensionFilter implements FilenameFilter {
         public boolean accept(File dir, String name) {
             return (name.endsWith(".mp4") || name.endsWith(".MP4")
                     || name.endsWith(".jpg") || name.endsWith(".JPG"));

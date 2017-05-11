@@ -16,25 +16,24 @@ import java.util.ArrayList;
  * Created by Crow on 9/5/2017.
  */
 
-public class Play {
+class Play {
 
-    Context context;
-    VideoView videoView;
-    ImageView imageView;
+    private Context context;
+    private VideoView videoView;
+    private ImageView imageView;
 
-    ArrayList<String> playList;
+    private ArrayList<String> playList;
 
     private static int plIndex = 0;
     private static final int IMAGE_DEFAULT_DURATION = 10000;
 
-    public Play(Context context){
+    Play(Context context){
         playList = new Playlist().getPlayList();
-        this.context = context;
         videoView = (VideoView) ((Activity)context).findViewById(R.id.videoView);
         imageView = (ImageView) ((Activity)context).findViewById(R.id.imageView);
     }
 
-    public void loopAll(){
+    void loopAll(){
         playNext();
     }
 
