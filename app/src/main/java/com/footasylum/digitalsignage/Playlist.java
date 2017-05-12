@@ -1,8 +1,10 @@
 package com.footasylum.digitalsignage;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 
@@ -12,22 +14,48 @@ import java.util.ArrayList;
 
 class Playlist {
     //private ArrayList<HashMap<String, String>> playlist = new ArrayList<HashMap<String, String>>();
-    private ArrayList<String> playlist1 = new ArrayList<>();
+    private ArrayList<String> playlist = new ArrayList<>();
 
-    private final String MEDIA_PATH = Environment.getExternalStorageDirectory()+ File.separator+ "FA";
+    private static String MEDIA_PATH = "";
+
+    private boolean mExternalStorageAvailable = false;
+    private boolean mExternalStorageWriteable = false;
+    private String state = Environment.getExternalStorageState();
+
     /**
      * Function to read all mp4 and jpg files from sdcard
      * and store the details in ArrayList
      * */
     ArrayList<String> getPlayList(){
-        File home = new File(MEDIA_PATH);
+        checkExternalStorage();
+        File home = checkExternalStorage();
         if (home.listFiles()!=null) {
             for (File file : home.listFiles(new FileExtensionFilter())) {
                 String song = file.getPath();
-                playlist1.add(song);
+                playlist.add(song);
             }
         }
-        return playlist1;
+        return playlist;
+    }
+
+    private File checkExternalStorage(){
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            mExternalStorageAvailable = mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            mExternalStorageAvailable = true;
+            mExternalStorageWriteable = false;
+        } else {
+            mExternalStorageAvailable = mExternalStorageWriteable = false;
+        }
+        if(mExternalStorageAvailable){
+            MEDIA_PATH = Environment.getExternalStorageDirectory()+ File.separator+ "FA";
+        }else
+            MEDIA_PATH = Environment.getDataDirectory()+File.separator+"FA";
+        File home = new File(MEDIA_PATH);
+        if(!home.exists()){
+            home.mkdir();
+        }
+        return home;
     }
 
     /**

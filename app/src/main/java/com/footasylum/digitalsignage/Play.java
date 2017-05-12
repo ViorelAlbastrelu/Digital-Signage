@@ -8,6 +8,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.util.ArrayList;
@@ -29,12 +30,18 @@ class Play {
 
     Play(Context context){
         playList = new Playlist().getPlayList();
+        this.context = context;
         videoView = (VideoView) ((Activity)context).findViewById(R.id.videoView);
         imageView = (ImageView) ((Activity)context).findViewById(R.id.imageView);
+        imageView.setImageResource(R.drawable.footasylum_wallpaper);
+        imageView.setVisibility(View.VISIBLE);
     }
 
     void loopAll(){
-        playNext();
+        if(playList.isEmpty()){
+            Toast.makeText(context, "Playlist is empty", Toast.LENGTH_LONG).show();
+        }else
+            playNext();
     }
 
     private void playVideo(){
@@ -87,8 +94,6 @@ class Play {
     }
 
     private void playNext(){
-        Log.i("info", playList.size()+"");
-        Log.i("info", plIndex +"");
         if (plIndex < playList.size()){
             String content = playList.get(plIndex);
             if (content.endsWith(".mp4") || content.endsWith(".MP4")) {
