@@ -23,13 +23,13 @@ public class DownloadPlaylistService extends Service {
     private final IBinder iBinder = new MyBinder();
 
     public DownloadPlaylistService() {
-//        downloadWithManager("Provide url");
     }
 
-    public void downloadWithManager(String fileURL){
+    public void downloadWithManager (String fileURL){
 
         String fileName = URLUtil.guessFileName(fileURL, null, MimeTypeMap.getFileExtensionFromUrl(fileURL));
-        String dwnldDir = Environment.getDownloadCacheDirectory().getPath();
+        String dwnldDir = Environment.getDataDirectory().getPath() + File.separator + "FA";
+        Log.i("dwnldDir:",dwnldDir);
 
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(fileURL));
         request.setTitle("File download.");
@@ -79,7 +79,7 @@ public class DownloadPlaylistService extends Service {
         return iBinder;
     }
 
-    private class MyBinder extends Binder {
+    public class MyBinder extends Binder {
         DownloadPlaylistService getService(){
             return DownloadPlaylistService.this;
         }

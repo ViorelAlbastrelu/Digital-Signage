@@ -1,6 +1,8 @@
 package com.footasylum.digitalsignage;
 
+import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.io.File;
@@ -15,22 +17,31 @@ import java.util.ArrayList;
 class Playlist {
     //private ArrayList<HashMap<String, String>> playlist = new ArrayList<HashMap<String, String>>();
     private ArrayList<String> playlist = new ArrayList<>();
-
-    private static String MEDIA_PATH = "";
-
     private boolean mExternalStorageAvailable = false;
     private boolean mExternalStorageWriteable = false;
     private String state = Environment.getExternalStorageState();
-
     /**
      * Function to read all mp4 and jpg files from sdcard
      * and store the details in ArrayList
      * */
+
     ArrayList<String> getPlayList(){
         checkExternalStorage();
-        File home = checkExternalStorage();
-        if (home.listFiles()!=null) {
-            for (File file : home.listFiles(new FileExtensionFilter())) {
+        String MEDIA_PATH;
+        if (mExternalStorageAvailable && mExternalStorageWriteable) {
+            MEDIA_PATH = Environment.getExternalStorageDirectory().getPath() + File.separator + "FA";
+            Log.i("info1: ", MEDIA_PATH);
+        }else {
+            MEDIA_PATH = Environment.getDataDirectory().getPath() + File.separator + "FA";
+            Log.i("info2: ", MEDIA_PATH);
+        }
+        File path = new File(MEDIA_PATH);
+        if (!path.exists()){
+            path.mkdir();
+        }
+//        Log.i("info", home.getPath());
+        if (path.listFiles() != null) {
+            for (File file : path.listFiles(new FileExtensionFilter())) {
                 String song = file.getPath();
                 playlist.add(song);
             }
@@ -38,7 +49,7 @@ class Playlist {
         return playlist;
     }
 
-    private File checkExternalStorage(){
+    private void checkExternalStorage() {
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             mExternalStorageAvailable = mExternalStorageWriteable = true;
         } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
@@ -47,15 +58,6 @@ class Playlist {
         } else {
             mExternalStorageAvailable = mExternalStorageWriteable = false;
         }
-        if(mExternalStorageAvailable){
-            MEDIA_PATH = Environment.getExternalStorageDirectory()+ File.separator+ "FA";
-        }else
-            MEDIA_PATH = Environment.getDataDirectory()+File.separator+"FA";
-        File home = new File(MEDIA_PATH);
-        if(!home.exists()){
-            home.mkdir();
-        }
-        return home;
     }
 
     /**
